@@ -23,19 +23,36 @@ Thank you!
     height=200
 )
 
+# Adding the sidebar for selecting the repo_id
+st.sidebar.title("Model Selection")
+repo_id = st.sidebar.selectbox(
+    "Select the HuggingFace model:",
+    options=[
+        "mistralai/Mixtral-8x7B-Instruct-v0.1",
+        "mistralai/Mistral-7B-Instruct-v0.2",
+        "mistralai/Mistral-7B-Instruct-v0.3",
+        "microsoft/Phi-3-mini-4k-instruct",
+        "google/gemma-2-2b-it"
+    ],
+    index=0  # Default selection
+)
+
+n_retrieved_docs = st.sidebar.number_input(
+    "Number of documents to retrieve:",
+    min_value=1,
+    max_value=20,
+    value=5,  # Default value
+    step=1
+)
+
 from langchain_huggingface import HuggingFaceEndpoint
 from langchain_chroma.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.runnables import RunnablePassthrough, RunnableAssign
 from langchain_core.output_parsers import StrOutputParser
 
-
 if question:
-    repo_id = "mistralai/Mixtral-8x7B-Instruct-v0.1"
     llm = HuggingFaceEndpoint(repo_id=repo_id, temperature=0.1)
-    # llm2 = HuggingFaceEndpoint(repo_id=repo_id, temperature=0.1)
-
-    # st.write(question)
 
     from dotenv import load_dotenv
     load_dotenv()
