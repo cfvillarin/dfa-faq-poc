@@ -51,29 +51,32 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_core.runnables import RunnablePassthrough, RunnableAssign
 from langchain_core.output_parsers import StrOutputParser
 
-if question:
-    llm = HuggingFaceEndpoint(repo_id=repo_id, temperature=0.1)
+if st.button("Submit"):
+    if question:
+        llm = HuggingFaceEndpoint(repo_id=repo_id, temperature=0.1)
 
-    from dotenv import load_dotenv
-    load_dotenv()
+        from dotenv import load_dotenv
+        load_dotenv()
 
-    from prompts import prompt, dfa_rag_prompt
+        from prompts import prompt, dfa_rag_prompt
 
-    # RETRIEVER 
-    CHROMA_PATH = "chroma"
-    n_retrieved_docs = 5
+        # RETRIEVER 
+        CHROMA_PATH = "chroma"
+        n_retrieved_docs = 5
 
-    embedding_function = OpenAIEmbeddings()
-    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
-    retriever =  db.as_retriever(search_kwargs={'k': n_retrieved_docs})
+        embedding_function = OpenAIEmbeddings()
+        db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
+        retriever =  db.as_retriever(search_kwargs={'k': n_retrieved_docs})
 
-    def format_docs(docs):
-        return f"\n\n".join(f"[FAQ]" + doc.page_content.replace("\n", " ") for n, doc in enumerate(docs, start=1))
+        def format_docs(docs):
+            return f"\n\n".join(f"[FAQ]" + doc.page_content.replace("\n", " ") for n, doc in enumerate(docs, start=1))
 
-    chain = prompt | llm | {"context": retriever | format_docs, "question": RunnablePassthrough()} | dfa_rag_prompt | llm
+        chain = prompt | llm | {"context": retriever | format_docs, "question": RunnablePassthrough()} | dfa_rag_prompt | llm
 
-    input_dict = {"question": question}
+        input_dict = {"question": question}
 
-    response = chain.invoke(input_dict)
+        response = chain.invoke(input_dict)
 
-    st.write(response)
+        st.write(response)
+    else:
+        st.warning("Please enter a question before submitting.")
