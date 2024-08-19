@@ -61,7 +61,6 @@ if question:
 
     # RETRIEVER 
     CHROMA_PATH = "chroma"
-    n_retrieved_docs = 5
 
     embedding_function = OpenAIEmbeddings()
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
