@@ -51,18 +51,17 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_core.runnables import RunnablePassthrough, RunnableAssign
 from langchain_core.output_parsers import StrOutputParser
 
-if st.button("Submit"):
-    if question:
-        llm = HuggingFaceEndpoint(repo_id=repo_id, temperature=0.1)
+if question:
+    llm = HuggingFaceEndpoint(repo_id=repo_id, temperature=0.1)
 
         from dotenv import load_dotenv
         load_dotenv()
 
         from prompts import prompt, dfa_rag_prompt
 
-        # RETRIEVER 
-        CHROMA_PATH = "chroma"
-        n_retrieved_docs = 5
+    # RETRIEVER 
+    CHROMA_PATH = "chroma"
+    n_retrieved_docs = 5
 
         embedding_function = OpenAIEmbeddings()
         db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
@@ -77,6 +76,4 @@ if st.button("Submit"):
 
         response = chain.invoke(input_dict)
 
-        st.write(response)
-    else:
-        st.warning("Please enter a question before submitting.")
+    st.write(response)
