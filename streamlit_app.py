@@ -18,7 +18,7 @@ with col2:
     st.image("images/CAIR_cropped.png", use_column_width=True)
     st.markdown(
         """
-        <div style="text-align: right; margin-top: -10px;">
+        <div style="text-align: center; margin-top: -10px;">
             Developed by CAIR
         </div>
         """, 
