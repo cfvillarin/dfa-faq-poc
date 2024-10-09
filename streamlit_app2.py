@@ -135,8 +135,24 @@ if email_body:
     # output_dict['flagged'] = ('no' in output_dict['in_scope'].lower()) | ('no' in output_dict['satisfactory_answer'].lower())
     # output_dict = RunnablePassthrough.assign(translated2=prompt | llm).invoke(output_dict)
     
+    # First box: AI-Generated Autoreply
+    st.markdown(
+        f"""
+        <div style="
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            padding: 10px; 
+            border-radius: 5px; 
+            background-color: rgba(255, 255, 255, 0.1); 
+            color: inherit; 
+            margin-bottom: 20px;">
+            <strong>AI-Generated Autoreply:</strong><br>
+            {output_dict['email_autoreply']}
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
+    
     st.write(
-        "AI-Generated Autoreply:\n", output_dict['email_autoreply'],
         "\n\nOutput Dictionary:", 
         output_dict
     )
