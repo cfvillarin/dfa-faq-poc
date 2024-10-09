@@ -4,7 +4,25 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import streamlit as st
 
-st.title("DFA POC")
+# Create columns for the title and logo
+col1, col2 = st.columns([3.5, 1])  # Adjust the ratio as needed
+
+# Title in the first column
+with col1:
+    st.title("📄 Sanggun-E PoC 🤖")
+    st.write(
+        "This app answers questions based on FAQs found [here](https://consular.dfa.gov.ph/faqs-menu?). "
+    )
+# Logo and "Developed by CAIR" text in the second column
+with col2:
+    st.image("images/CAIR_cropped.png", use_column_width=True)
+    st.markdown(
+        """
+        <div style="text-align: center; margin-top: -10px;">
+            Developed by CAIR
+        </div>
+        """, 
+        unsafe_allow_html=True)
 
 email_body = st.text_area(
     "Enter your email text here!",
