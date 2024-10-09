@@ -151,8 +151,10 @@ if email_body:
             output_dict['satisfactory_answer'] = True
             output_dict = RunnablePassthrough.assign(email_autoreply=email_format_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip())).invoke(output_dict)
         else:
+            output_dict['satisfactory_answer'] = False
             output_dict['flagged'] = True
     else:
+        output_dict['in_scope'] = False
         output_dict['flagged'] = True
     
     if output_dict['flagged']:
