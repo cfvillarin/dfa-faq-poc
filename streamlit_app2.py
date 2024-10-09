@@ -142,11 +142,13 @@ if email_body:
     output_dict = RunnablePassthrough.assign(extracted_query=qe_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip())).invoke(output_dict)
     output_dict = RunnablePassthrough.assign(in_scope=prompt2 | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip().split()[0])).invoke(output_dict)
     if 'yes' in output_dict['in_scope'].lower():
+        output_dict['in_scope'] = True
         output_dict = RunnablePassthrough.assign(keywords=keyword_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: eval(x.strip("```python")))).invoke(output_dict)
         output_dict = RunnablePassthrough.assign(retrieved_docs=RunnableLambda(lambda x: x['extracted_query']) | retriever).invoke(output_dict)
         output_dict = RunnablePassthrough.assign(generated_answer=rag_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip())).invoke(output_dict)
         output_dict = RunnablePassthrough.assign(satisfactory_answer=prompt4 | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip().split()[0])).invoke(output_dict)
         if 'yes' in output_dict['satisfactory_answer'].lower():
+            output_dict['satisfactory_answer'] = True
             output_dict = RunnablePassthrough.assign(email_autoreply=email_format_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip())).invoke(output_dict)
         else:
             output_dict['flagged'] = True
