@@ -25,12 +25,12 @@ with col2:
         unsafe_allow_html=True)
 
 email_body = st.text_area(
-    """Hi DFA, 
+    "Enter your email text here!",
+    placeholder="""Hi DFA, 
 
 My name is James. My passport has been damaged. What should I do?
 
-Thank you very much!""",
-    placeholder="""Enter email body here
+Thank you very much!
     """,
     height=200
 )
