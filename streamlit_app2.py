@@ -114,31 +114,29 @@ llm = HuggingFaceEndpoint(repo_id=repo_id, temperature=0.01)
 
 # output_dict = RunnablePassthrough.assign(translated=prompt | llm).invoke(temp_dict)
 
-def eval_text(text):
-    return eval(text)
-
-output_dict = RunnablePassthrough.assign(extracted_query=qe_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip())).invoke(output_dict)
-output_dict = RunnablePassthrough.assign(in_scope=prompt2 | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip().split()[0])).invoke(output_dict)
-if 'yes' in output_dict['in_scope'].lower():
-    output_dict = RunnablePassthrough.assign(keywords=keyword_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: eval(x.strip()))).invoke(output_dict)
-    output_dict = RunnablePassthrough.assign(retrieved_docs=RunnableLambda(lambda x: x['extracted_query']) | retriever).invoke(output_dict)
-    output_dict = RunnablePassthrough.assign(generated_answer=rag_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip())).invoke(output_dict)
-    output_dict = RunnablePassthrough.assign(satisfactory_answer=prompt4 | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip())).invoke(output_dict)
-    if 'yes' in output_dict['satisfactory_answer'].lower():
-        output_dict = RunnablePassthrough.assign(email_autoreply=email_format_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip())).invoke(output_dict)
+if email_body:
+    output_dict = RunnablePassthrough.assign(extracted_query=qe_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip())).invoke(output_dict)
+    output_dict = RunnablePassthrough.assign(in_scope=prompt2 | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip().split()[0])).invoke(output_dict)
+    if 'yes' in output_dict['in_scope'].lower():
+        output_dict = RunnablePassthrough.assign(keywords=keyword_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: eval(x.strip()))).invoke(output_dict)
+        output_dict = RunnablePassthrough.assign(retrieved_docs=RunnableLambda(lambda x: x['extracted_query']) | retriever).invoke(output_dict)
+        output_dict = RunnablePassthrough.assign(generated_answer=rag_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip())).invoke(output_dict)
+        output_dict = RunnablePassthrough.assign(satisfactory_answer=prompt4 | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip())).invoke(output_dict)
+        if 'yes' in output_dict['satisfactory_answer'].lower():
+            output_dict = RunnablePassthrough.assign(email_autoreply=email_format_prompt | llm | StrOutputParser() | RunnableLambda(lambda x: x.strip())).invoke(output_dict)
+        else:
+            output_dict['flagged'] = True
     else:
         output_dict['flagged'] = True
-else:
-    output_dict['flagged'] = True
-
-if output_dict['flagged']:
-    output_dict['email_autoreply'] = """Thank you for contacting us. Your email has been received and flagged for a manual response by one of our agents, as it requires assistance beyond our FAQs. Please stand by, and we will get back to you as soon as possible."""
-
-# output_dict['flagged'] = ('no' in output_dict['in_scope'].lower()) | ('no' in output_dict['satisfactory_answer'].lower())
-# output_dict = RunnablePassthrough.assign(translated2=prompt | llm).invoke(output_dict)
-
-st.write(
-    "AI-Generated Autoreply:\n", output_dict['email_autoreply'],
-    "\n\nOutput Dictionary:", 
-    output_dict
-)
+    
+    if output_dict['flagged']:
+        output_dict['email_autoreply'] = """Thank you for contacting us. Your email has been received and flagged for a manual response by one of our agents, as it requires assistance beyond our FAQs. Please stand by, and we will get back to you as soon as possible."""
+    
+    # output_dict['flagged'] = ('no' in output_dict['in_scope'].lower()) | ('no' in output_dict['satisfactory_answer'].lower())
+    # output_dict = RunnablePassthrough.assign(translated2=prompt | llm).invoke(output_dict)
+    
+    st.write(
+        "AI-Generated Autoreply:\n", output_dict['email_autoreply'],
+        "\n\nOutput Dictionary:", 
+        output_dict
+    )
