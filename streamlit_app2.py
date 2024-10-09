@@ -75,12 +75,12 @@ Preprocessed Query: "What are the requirements for applying for a passport?"
 Original Query: Hi, My name is Jane Doe. Nawala ang aking passport. Ano ang kailangan kong gawin?
 Preprocessed Query: "I lost my passport, what should I do?"
 
-# Example 3
+# Example 4
 Original Query: What should I eat today?
 Preprocessed Query: "No relevant question"                                     
 
 Do the same for this last query. Preprocess the following query, return plain text only:
-Original Query: ```{email_body}```
+(FINAL Example) Original Query: ```{email_body}```
 (NO CODE) Preprocessed Query:""")
 
 rag_prompt = PromptTemplate.from_template("""
