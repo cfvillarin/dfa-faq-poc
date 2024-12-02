@@ -191,7 +191,8 @@ if email_body:
                 margin-bottom: 20px;">
                 No retrieved documents. The query is not similar to any FAQ.
             </div>
-            """
+            """, 
+            unsafe_allow_html=True
         )
 
     # Add a collapsible section for the raw dictionary
