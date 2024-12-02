@@ -22,8 +22,8 @@ Preprocessed Query: "I lost my passport, what should I do?"
 Original Query: What should I eat today?
 Preprocessed Query: "No relevant question"                                     
 
-Do the same for this last or final query. Preprocess the following query, return the Preprocessed Query only (and nothing else, no comments):
-# Final
+Do the same for this last or final query. Return the Preprocessed Query only and nothing else (no comments at the end):
+# Final Example
 Original Query: ```{email_body}```
 Preprocessed Query:""")
 
