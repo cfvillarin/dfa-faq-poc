@@ -118,13 +118,12 @@ if email_body:
         """, 
         unsafe_allow_html=True
     )
-
+    st.markdown("---")
+    st.markdown("### RAG Breakdown")
+    st.markdown("#### Extracted Query")
+    
     st.markdown(
         f"""
-        ---
-        ### RAG Breakdown
-        
-        #### Extracted Query
         <div style="
             border: 1px solid rgba(255, 255, 255, 0.2); 
             padding: 10px; 
