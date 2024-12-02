@@ -52,7 +52,7 @@ Return a list containing at most 3 items.
 Example answer: ["Passport", "Lost", "Missing"]
 Answer: """)
 
-email_format_prompt = PromptTemplate.from_template("""You are an AI-assistant for the Department of Foreign Affairs. You're task is to construct an answer into email form.
+email_format_prompt = PromptTemplate.from_template("""You are an AI-assistant for the Department of Foreign Affairs. You're task is to construct an answer into an email body (Not including Subject). 
 A citizen emailed the following: ```{email_body}```
 The detected query is: ```{extracted_query}```
 The generated answer is: ```{generated_answer}```
