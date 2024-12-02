@@ -56,7 +56,7 @@ email_format_prompt = PromptTemplate.from_template("""You are an AI-assistant fo
 A citizen emailed the following: ```{email_body}```
 The detected query is: ```{extracted_query}```
 The generated answer is: ```{generated_answer}```
-Construct the email for sending. This will be automatically sent, so add a disclaimer saying that this is AI-generated and they could reply if unsatisfied or for further clarification.
+Construct the email for sending. This will be automatically sent, so add a disclaimer saying that this is AI-generated and they could reply if unsatisfied or for further clarification. Return as text only, not in quotes.
 AI-Generated Autoreply: 
 """)
 
