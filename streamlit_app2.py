@@ -165,10 +165,11 @@ if email_body:
                     st.write(f"Document {i + 1} could not be processed.")
 
 
+        st.markdown("#### Generated Answer")
+        
         # Display the generated answer and AI-generated autoreply
         st.markdown(
             f"""
-            #### Generated Answer
             <div style="
                 border: 1px solid rgba(255, 255, 255, 0.2); 
                 padding: 10px; 
