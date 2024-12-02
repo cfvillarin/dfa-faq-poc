@@ -62,10 +62,12 @@ AI-Generated Autoreply:
 prompt = PromptTemplate.from_template("""You are a translation assistant. I will only give you one translation task, you will give the answer only and nothing else, and here it is:
 Translate to english: ```{email_body}```:""")
 
-in_scope_prompt = PromptTemplate.from_template("""Answer in only one word, either "Yes" or "No". I will only give two questions only.   
-Is this question look like a legitimate question to a government helpdesk?
-1/ ```Where is the DFA Office located```. Answer: Yes 
-2/ ```{extracted_query}```. Answer: """)
+in_scope_prompt = PromptTemplate.from_template("""Answer in only one word, either "Yes" or "No".
+
+Is this question look like a legitimate question to a public helpdesk?
+1/ ```Where is the DFA Office located?```. Answer: Yes
+2/ ```What should I eat for dinner?```. Answer No
+3/ ```{extracted_query}```. Answer: """)
 
 prompt3 = PromptTemplate.from_template("""You only know about the following: ```{retrieved_docs}```, Answer the question by quoting directly from your knowledge: {extracted_query}. Answer ony what was asked. Answer: """)
 
