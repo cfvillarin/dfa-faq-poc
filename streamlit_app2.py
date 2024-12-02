@@ -180,6 +180,7 @@ if email_body:
             unsafe_allow_html=True
             )
     else:
+        st.markdown("#### Retrieved FAQs")
         st.markdown(
             f"""
             <div style="
