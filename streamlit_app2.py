@@ -28,7 +28,6 @@ with col1:
     st.write(
         "This app answers questions based on FAQs found [here](https://consular.dfa.gov.ph/faqs-menu?). "
     )
-    st.write("test 1:22 pm")
 # Logo and "Developed by CAIR" text in the second column
 with col2:
     st.image("images/CAIR_cropped.png", use_column_width=True)
@@ -70,7 +69,7 @@ n_retrieved_docs = 5
 
 embedding_function = OpenAIEmbeddings()
 db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
-retriever =  db.as_retriever(search_type="similarity_score_threshold", search_kwargs={'k': n_retrieved_docs, 'score_threshold': 0.25})
+retriever =  db.as_retriever(search_type="similarity_score_threshold", search_kwargs={'k': n_retrieved_docs})
 
 repo_id = "mistralai/Mixtral-8x7B-Instruct-v0.1"  
 # repo_id = "microsoft/Phi-3-mini-4k-instruct"
