@@ -23,9 +23,9 @@ Original Query: What should I eat today?
 Preprocessed Query: "No relevant question"                                     
 
 Do the same for this last or final query. Preprocess the following query, return the Preprocessed Query only (and nothing else):
-# FINAL Example
+# FINAL FINAL Example
 Original Query: ```{email_body}```
-Preprocessed Query:""")
+English Preprocessed Query:""")
 
 rag_prompt = PromptTemplate.from_template("""
 You are a polite assistant for the Department of Foreign Affairs.
