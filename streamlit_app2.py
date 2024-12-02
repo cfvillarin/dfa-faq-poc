@@ -68,7 +68,7 @@ n_retrieved_docs = 5
 
 embedding_function = OpenAIEmbeddings()
 db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
-retriever =  db.as_retriever(search_kwargs={'k': n_retrieved_docs})
+retriever =  db.as_retriever(search_type="similarity_score_threshold", search_kwargs={'k': n_retrieved_docs, 'score_threshold': 0.8})
 
 
 qe_prompt = PromptTemplate.from_template("""
