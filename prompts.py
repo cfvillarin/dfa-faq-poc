@@ -2,9 +2,10 @@ from langchain_core.prompts import PromptTemplate
 
 qe_prompt = PromptTemplate.from_template("""
 I want to preprocess a query so that it contains only necessary information only. 
-Remove any Personal Identifiable Information (PII) such as Name, Birthdays, or Passport Numbers.
-If in another language like Tagalog, Translate it to English. 
-REMOVE questions, greetings, and instructions unrelated to official business with the Department of Foreign Affairs.
+1. Remove any Personal Identifiable Information (PII) such as Name, Birthdays, or Passport Numbers.
+2. If in another language like Tagalog, Translate it to English. 
+3. REMOVE questions, greetings, and instructions unrelated to official business with the Department of Foreign Affairs.
+4. Keep the important contexts in the message.
 
 # Example 1
 Original Query: Hi, My name is Jane Doe. My passport number is PE1210432. I lost my passport when I was walking at the park. What should I do?
