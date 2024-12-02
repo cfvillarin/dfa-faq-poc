@@ -162,7 +162,7 @@ if email_body:
     
     # output_dict['flagged'] = ('no' in output_dict['in_scope'].lower()) | ('no' in output_dict['satisfactory_answer'].lower())
     # output_dict = RunnablePassthrough.assign(translated2=prompt | llm).invoke(output_dict)
-    
+
     # First box: AI-Generated Autoreply
     st.markdown(
         f"""
@@ -179,8 +179,71 @@ if email_body:
         """, 
         unsafe_allow_html=True
     )
-    
-    st.write(
-        "\n\nOutput Dictionary:", 
-        output_dict
+
+    st.markdown(
+        f"""
+        ---
+        ### RAG Breakdown
+        #### Extracted Query
+        <div style="
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            padding: 10px; 
+            border-radius: 5px; 
+            background-color: rgba(255, 255, 255, 0.1); 
+            color: inherit; 
+            margin-bottom: 20px;">
+            {output_dict['extracted_query']}
+        </div>
+        """, 
+        unsafe_allow_html=True
     )
+
+    if output_dict.get('retrieved_docs'):
+        # Display the retrieved documents
+        st.markdown("#### Retrieved FAQs")
+        with st.expander("View Retrieved FAQs"):
+            for i, doc in enumerate(output_dict['retrieved_docs']):
+                doc_dict = process_page_content(doc.page_content + '}')
+                if doc_dict:
+                    st.markdown(
+                        f"""
+                        <div style="
+                            border: 1px solid rgba(255, 255, 255, 0.2); 
+                            padding: 10px; 
+                            border-radius: 5px; 
+                            background-color: rgba(255, 255, 255, 0.05); 
+                            color: inherit; 
+                            margin-bottom: 10px;">
+                            <strong>FAQ {i + 1}:</strong><br>
+                            <strong>Category:</strong> {doc_dict.get('category', 'N/A')}<br>
+                            <strong>Question:</strong> {doc_dict.get('question', 'N/A')}<br>
+                            <strong>Answer:</strong> {doc_dict.get('answer', 'N/A')}
+                        </div>
+                        """, 
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.write(f"Document {i + 1} could not be processed.")
+
+
+        # Display the generated answer and AI-generated autoreply
+        st.markdown(
+            f"""
+            #### Generated Answer
+            <div style="
+                border: 1px solid rgba(255, 255, 255, 0.2); 
+                padding: 10px; 
+                border-radius: 5px; 
+                background-color: rgba(255, 255, 255, 0.1); 
+                color: inherit; 
+                margin-bottom: 20px;">
+                {output_dict['generated_answer']}
+            </div>
+            """, 
+            unsafe_allow_html=True
+            )
+
+
+    # Add a collapsible section for the raw dictionary
+    with st.expander("View Raw Output Dictionary"):
+        st.json(output_dict)
