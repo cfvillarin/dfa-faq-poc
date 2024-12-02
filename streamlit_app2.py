@@ -123,6 +123,7 @@ if email_body:
         f"""
         ---
         ### RAG Breakdown
+        
         #### Extracted Query
         <div style="
             border: 1px solid rgba(255, 255, 255, 0.2); 
@@ -180,7 +181,7 @@ if email_body:
             </div>
             """, 
             unsafe_allow_html=True
-            )
+        )
     else:
         st.markdown("#### Retrieved FAQs")
         st.markdown(
