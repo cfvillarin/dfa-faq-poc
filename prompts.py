@@ -42,7 +42,7 @@ QUESTION: `{extracted_query}`
 3. Answer only what was directly asked.
 4. Please return strictly as plain text and not markdown format. 
 5. The 'context' is internal, do not mention its existense in the answer, give an answer as if you are the source of information. 
-6. Please give a detailed answer. Provide instructions or links that exist in the context if needed. 
+6. Please give a detailed answer. Provide instructions or links that exist in the context if needed. Strictly avoid making up references.
 
 Answer:
 """)
