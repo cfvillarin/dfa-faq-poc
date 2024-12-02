@@ -4,6 +4,20 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import streamlit as st
 
+import ast
+
+def process_page_content(page_content):
+    try:
+        # Extract the structured dictionary part from the string
+        start_idx = page_content.find("{")
+        structured_part = page_content[start_idx:]
+        # Safely evaluate the string as a Python dictionary
+        doc_dict = ast.literal_eval(structured_part)
+        return doc_dict
+    except (ValueError, SyntaxError) as e:
+        st.error(f"Error parsing document: {e}")
+        return None
+
 # Create columns for the title and logo
 col1, col2 = st.columns([3.5, 1])  # Adjust the ratio as needed
 
