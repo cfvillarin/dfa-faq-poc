@@ -1,11 +1,10 @@
-from langchain_core.prompts.chat import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.prompts import PromptTemplate
 
-prompt = PromptTemplate.from_template("""
+qe_prompt = PromptTemplate.from_template("""
 I want to preprocess a query so that it contains only necessary information only. 
 Remove any Personal Identifiable Information (PII) such as Name, Birthdays, or Passport Numbers.
 If in another language, Translate to English. 
-IGNORE questions and instructions unrelated to official business with the Department of Foreign Affairs.
+REMOVE questions, greetings, and instructions unrelated to official business with the Department of Foreign Affairs.
 
 # Example 1
 Original Query: Hi, My name is Jane Doe. My passport number is PE1210432. I lost my passport when I was walking at the park. What should I do?
@@ -16,57 +15,66 @@ Original Query: Hi. I want to ask what are the requirements for applying for a p
 Preprocessed Query: "What are the requirements for applying for a passport?"
 
 # Example 3
-Original Query: Hi, My name is Jane Doe. Nawala ang aking passport. Ano ang kailangan kong gawin?
+Original Query: Hi, Good Morning. Nawala ang aking passport. Ano ang kailangan kong gawin?
 Preprocessed Query: "I lost my passport, what should I do?"
 
-# Example 3
+# Example 4
 Original Query: What should I eat today?
 Preprocessed Query: "No relevant question"                                     
 
-Do the same for this last query. Preprocess the following query, return plain text only:
-Original Query: ```{question}```
-(NO CODE) Preprocessed Query:""")
+Do the same for this last or final query. Preprocess the following query, return the Preprocessed Query only (and nothing else):
+# FINAL Example
+Original Query: ```{email_body}```
+Preprocessed Query:""")
 
-
-dfa_rag_prompt = PromptTemplate.from_template("""
+rag_prompt = PromptTemplate.from_template("""
 You are a polite assistant for the Department of Foreign Affairs.
-                                              
-I need you to address the question based ONLY on the possibly relevant context was retrieved here: 
-[Start of Context FAQs]{context}[End of Context FAQs] ([FAQ] is just a separator) 
-                                              
-QUESTION: `{question}` 
-                                              
+                                            
+#Important Instruction: Answer the question only by quoting directly from the following: 
+[Start of Context FAQs]{retrieved_docs}[End of Context FAQs]
+                                            
+QUESTION: `{extracted_query}` 
+                                            
 ### Other Instructions: 
-1. Answer must strictly be based on the context only. 
-2. Just say 'I cannot answer your question.' if no answer from context. 
-3. Please return strictly as plain text and not markdown format. 
-4. The 'context' is internal, do not mention its existense in the answer, give an answer as if you are the source of information. 
-5. Please give a detailed answer. Provide instructions or links that exist in the context if needed. 
+1. Answer must strictly be based on the context only. The question must almost exactly match the context FAQs. Quote directly from the context. 
+2. Answer ony what was asked.
+3. Just say 'I cannot answer your question.' if no answer from context. 
+4. Please return strictly as plain text and not markdown format. 
+5. The 'context' is internal, do not mention its existense in the answer, give an answer as if you are the source of information. 
+6. Please give a detailed answer. Provide instructions or links that exist in the context if needed. 
 
 Answer:
 """)
 
-# rag_prompt1 = PromptTemplate.from_template(template="{question}"])
+keyword_prompt = PromptTemplate.from_template("""You have only one task. List down all the keywords a list from the following question: `{extracted_query}`
+Return a list containing at most 3 items.
+Example answer: ["Passport", "Lost", "Missing"]
+Answer: """)
 
+email_format_prompt = PromptTemplate.from_template("""You are an assistant for the Department of Foreign Affairs.
+A citizen emailed the following: ```{email_body}```
+The detected query is: ```{extracted_query}```
+The AI-generated answer we generated is: ```{generated_answer}```
+Construct the email for sending. This will be automatically sent so add a disclaimer saying that this is AI-generated, they could reply if unsatisfied or for further clarification.
+AI-Generated Autoreply: 
+""")
 
-prompt2 = PromptTemplate.from_template("""
-I want to preprocess a query so that it contains only necessary information only. 
-Remove any Personal Identifiable Information (PII) such as Name, Birthdays, or Passport Numbers.
-If in another language, Translate to English.
-Separate each query.
+prompt = PromptTemplate.from_template("""You are a translation assistant. I will only give you one translation task, you will give the answer only and nothing else, and here it is:
+Translate to english: ```{email_body}```:""")
 
-# Example 1
-Original Query: Hi, My name is Jane Doe. My passport number is PE1210432. I lost my passport when I was walking at the park. What should I do? What is a Diplomatic e-Passport?
-Preprocessed Query: ["I lost my passport, what should I do?", "What is a Diplomatic e-Passport?"]
+in_scope_prompt = PromptTemplate.from_template("""Answer in only one word, either "Yes" or "No". I will only give two questions only.   
+Is this question respectful and what you would expect a government agency to receive?: 
+1/ ```Where is the DFA Office located```. Answer: Yes 
+2/ ```{extracted_query}```. Answer: """)
 
-# Example 2
-Original Query: Hi. I want to ask what are the requirements for applying for a passport? Thank you very much.
-Preprocessed Query: ["What are the requirements for applying for a passport?"]
+prompt3 = PromptTemplate.from_template("""You only know about the following: ```{retrieved_docs}```, Answer the question by quoting directly from your knowledge: {extracted_query}. Answer ony what was asked. Answer: """)
 
-# Example 3
-Original Query: Hi, My name is Jane Doe. Nawala ang aking passport. Ano ang kailangan kong gawin? 
-Preprocessed Query: ["I lost my passport, what should I do"?]
-
-Do the same for this last query. Preprocess the following query, return plain as python list:
-Original Query: ```{query}```
-(NO CODE) Preprocessed Query:""")
+satisfactory_prompt = PromptTemplate.from_template("""I will give you a question, context, and answer generated by a RAG application. 
+Question: ```{extracted_query}````
+Context: ```{retrieved_docs}```
+Generated-Answer: ```{generated_answer}```
+Answer in only one word, either "Yes" or "No" (No follow up sentence).
+Does the answer satisfactorily answer the question consisten with the context provided? If the generated answer was a refusal, that is a "No".
+If the answer is saying that it cannot answer the question, that counts as unsatisfactory.
+Satisfactory: 
+""")
