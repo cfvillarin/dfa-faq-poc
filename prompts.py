@@ -63,7 +63,7 @@ prompt = PromptTemplate.from_template("""You are a translation assistant. I will
 Translate to english: ```{email_body}```:""")
 
 in_scope_prompt = PromptTemplate.from_template("""Answer in only one word, either "Yes" or "No". I will only give two questions only.   
-Is this question respectful and what you would expect a government agency to receive?: 
+Is this question what you would expect a government agency/office to receive?: 
 1/ ```Where is the DFA Office located```. Answer: Yes 
 2/ ```{extracted_query}```. Answer: """)
 
