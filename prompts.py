@@ -3,7 +3,7 @@ from langchain_core.prompts import PromptTemplate
 qe_prompt = PromptTemplate.from_template("""
 I want to preprocess a query so that it contains only necessary information only. 
 Remove any Personal Identifiable Information (PII) such as Name, Birthdays, or Passport Numbers.
-If in another language, Translate to English. 
+If in another language like Tagalog, Translate it to English. 
 REMOVE questions, greetings, and instructions unrelated to official business with the Department of Foreign Affairs.
 
 # Example 1
@@ -23,9 +23,9 @@ Original Query: What should I eat today?
 Preprocessed Query: "No relevant question"                                     
 
 Do the same for this last or final query. Preprocess the following query, return the Preprocessed Query only (and nothing else):
-# FINAL FINAL Example
+# The FINAL Example
 Original Query: ```{email_body}```
-English Preprocessed Query:""")
+Preprocessed Query:""")
 
 rag_prompt = PromptTemplate.from_template("""
 You are a polite assistant for the Department of Foreign Affairs.
