@@ -179,7 +179,20 @@ if email_body:
             """, 
             unsafe_allow_html=True
             )
-
+    else:
+        st.markdown(
+            f"""
+            <div style="
+                border: 1px solid rgba(255, 255, 255, 0.2); 
+                padding: 10px; 
+                border-radius: 5px; 
+                background-color: rgba(255, 255, 255, 0.1); 
+                color: inherit; 
+                margin-bottom: 20px;">
+                No retrieved documents. The query is not similar to any FAQ.
+            </div>
+            """
+        )
 
     # Add a collapsible section for the raw dictionary
     with st.expander("View Raw Output Dictionary"):
