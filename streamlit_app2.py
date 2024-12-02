@@ -28,6 +28,7 @@ with col1:
     st.write(
         "This app answers questions based on FAQs found [here](https://consular.dfa.gov.ph/faqs-menu?). "
     )
+    st.write("test 1:22 pm")
 # Logo and "Developed by CAIR" text in the second column
 with col2:
     st.image("images/CAIR_cropped.png", use_column_width=True)
