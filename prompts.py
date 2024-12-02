@@ -54,7 +54,7 @@ Answer: """)
 email_format_prompt = PromptTemplate.from_template("""You are an AI-assistant for the Department of Foreign Affairs. You're task is to construct an answer into email form.
 A citizen emailed the following: ```{email_body}```
 The detected query is: ```{extracted_query}```
-The AI-generated answer we generated is: ```{generated_answer}```
+The generated answer is: ```{generated_answer}```
 Construct the email for sending. This will be automatically sent, so add a disclaimer saying that this is AI-generated and they could reply if unsatisfied or for further clarification.
 AI-Generated Autoreply: 
 """)
